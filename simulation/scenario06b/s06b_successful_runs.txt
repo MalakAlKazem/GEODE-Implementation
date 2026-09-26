@@ -1,0 +1,15 @@
+Scenario06Bs51_p37 r=4
+Scenario06Bs51_p43 r=1
+Scenario06Bs51_p46 r=0
+Scenario06Bs52_p37 r=1
+Scenario06Bs52_p43 r=1
+Scenario06Bs52_p46 r=1
+Scenario06Bs53_p37 r=0
+Scenario06Bs53_p43 r=3
+Scenario06Bs53_p46 r=1
+Scenario06Bs54_p37 r=0
+Scenario06Bs55_p37 r=0
+Scenario06Bs55_p43 r=0
+Scenario06Bs55_p46 r=0
+Scenario06Bs56_p37 r=0
+Scenario06Bs56_p46 r=0

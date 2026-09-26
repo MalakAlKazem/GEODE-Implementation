@@ -32,6 +32,7 @@ GEODE-Implementation/
 ├── geode_5g3e/            the same design adapted to the real 5G3E testbed
 │   └── results/
 ├── preprocessing/         5G3E raw data → graph tensors
+├── simulation/            Simu5G scenario configurations, run scripts and extraction scripts
 ├── requirements.txt
 └── README.md
 ```
@@ -72,6 +73,26 @@ GEODE-Implementation/
 | `lifecycle_5g3e.py` | lifecycle with injected drift | §5.2.4 |
 | `baseline_classical.py` | Random Forest with / without lag features | §5.2.2 |
 | `c2_hmpgnn.py`, `c3_heads.py`, `wdt_model.py`, `wdt_data.py` | 5G3E variant of the model (site-level heads, measured backhaul relation, T = 10) | §4.3.3 |
+
+### Simulation and extraction (`simulation/`)
+
+One folder per scenario (`scenario06b`, `scenario06c`, `scenario07`,
+`scenario08`), each placed under `simu5g-1.4.4/simulations/nr/` when run.
+
+| file pattern | purpose |
+|---|---|
+| `gen_ini*.py` | generate the per-seed `omnetpp_s<seed>.ini` (topology, per-device mobility class and start positions, traffic schedule, power, sleep configs) |
+| `omnetpp_s<seed>.ini`, `demo.xml`, `ue_assignment_s<seed>.txt` | generated scenario configuration used for the reported runs |
+| `run_*.sh`, `sweep_*.sh` | run the baselines (3 powers) and single-cell sleep configurations; set `SIMU5G_WS` to your workspace (default `~/simu5g-workspace`) |
+| `extract_scenario*.py` | network inputs and energy (base-station / UE features, serving edges, EARTH energy) |
+| `extract_kpi_*.py` | per-device delay, jitter and packet loss per 3-second phase (`extract_kpi_1s_*` for the one-second variant, Table 5.14) |
+| `extract_sinr_*.py`, `merge_sinr_into_ue_inputs.py` | uplink SINR extraction and merge into the UE features |
+| `repair_kpi_grid*.py`, `trim_*.py`, `fix_positions.py` | label-grid repair, settling-window trimming, position reconstruction |
+| `extract_sleep_pairs.py`, `verify_sleep.py`, `compare_pairs.py` | paired baseline/sleep runs for the verification-loop ground truth |
+| `scenario08/` | the eight-cell scenario that could not be completed (§4.5.4), kept for resumption |
+
+Extraction runs on the SQLite exports produced by `opp_scavetool` and filters
+every statistic by both name and module path (§4.6.1). Scripts need Python ≥ 3.12.
 
 ### Results
 
@@ -195,16 +216,3 @@ python make_thesis_figures.py          # figures → ./figures
 - **C4 ground truth**: 640 labelled sleep opportunities from real paired
   simulator runs; an action is unsafe when its measured 95th-percentile delay
   ratio reaches 1.5.
-
-## Citation
-
-```bibtex
-@mastersthesis{alkazem2026geode,
-  author = {Malak AlKazem},
-  title  = {Graph-Based Digital Twin for Energy and Performance Modeling in 6G Networks},
-  school = {Lebanese University, Faculty of Science},
-  year   = {2026}
-}
-```
-
-If you use the 5G3E data, please also cite Phung et al. (6GNet 2022) above.

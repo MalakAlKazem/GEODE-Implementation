@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+data/
+checkpoints/
+checkpoints_5g3e/
+*.pt
+*.pth
+figures/
+.ipynb_checkpoints/
+.DS_Store

@@ -134,7 +134,16 @@ reference deployment.
 Each run is exported to SQLite with `opp_scavetool` and extracted into
 per-snapshot CSVs (100 ms snapshots; QoS measured per 3-second traffic phase).
 Base-station energy follows the EARTH linear load model,
-P = N_tx · P_idle + γ · P_load (N_tx = 2, P_idle = 130 W, γ = 4.7).
+
+P = N_tx · (P_idle + γ · P_tx · β),  β = RB_used / RB_max
+
+with N_tx = 2 transceiver chains, P_idle = 130 W per chain, γ = 4.7, P_tx the
+transmit power in watts and β the fraction of uplink resource blocks in use per
+100 ms snapshot (RB_max = 25 in scenario06c, 50 in scenario06b/07). An idle cell
+draws 260 W and a fully loaded one 307 / 448 / 634 W at 37 / 43 / 46 dBm. A
+reduced sleep draw (150 W) is applied only to unloaded cells in the first 0.5 s
+of a run; afterwards a slept cell keeps the 260 W idle floor, so a sleep action
+saves only the load-proportional term.
 
 <!-- TODO: add the download link (GitHub Release or Zenodo DOI) for the
      extracted scenario CSVs and the trained checkpoints. -->

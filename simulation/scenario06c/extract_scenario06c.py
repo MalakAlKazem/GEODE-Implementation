@@ -33,7 +33,7 @@ parameterization.
    instead of tens of minutes.
 
 Energy model, unchanged from scenario07 so the two are comparable:
-P = N_TRX * P0 + DELTA_P * tx_w * load * N_TRX, load = avg_rb_ul / 50.
+P = N_TRX * P0 + DELTA_P * tx_w * load * N_TRX, load = avg_rb_ul / MAX_RBS (25 in scenario06c).
 """
 
 import math

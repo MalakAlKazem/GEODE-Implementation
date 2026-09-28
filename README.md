@@ -79,6 +79,19 @@ GEODE-Implementation/
 One folder per scenario (`scenario06b`, `scenario06c`, `scenario07`,
 `scenario08`), each placed under `simu5g-1.4.4/simulations/nr/` when run.
 
+`simulation/networks/` holds the three custom Simu5G network topologies the
+scenarios use; copy them into `simu5g-1.4.4/simulations/nr/networks/` before
+running:
+
+| network | used by |
+|---|---|
+| `FourCell_Standalone.ned` | scenario07 (4 gNBs) |
+| `SixCell_Standalone.ned` | scenario06b, scenario06c (6 gNBs) |
+| `EightCell_Standalone.ned` | scenario08 (8 gNBs, not completed) |
+
+Base-station coordinates in the `.ned` files are display defaults only; each
+scenario's `omnetpp_s<seed>.ini` sets the actual positions and spacing.
+
 | file pattern | purpose |
 |---|---|
 | `gen_ini*.py` | generate the per-seed `omnetpp_s<seed>.ini` (topology, per-device mobility class and start positions, traffic schedule, power, sleep configs) |

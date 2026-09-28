@@ -145,8 +145,19 @@ reduced sleep draw (150 W) is applied only to unloaded cells in the first 0.5 s
 of a run; afterwards a slept cell keeps the 260 W idle floor, so a sleep action
 saves only the load-proportional term.
 
-<!-- TODO: add the download link (GitHub Release or Zenodo DOI) for the
-     extracted scenario CSVs. -->
+**Download.** The extracted datasets are attached to the
+[`datasets-v1` release](https://github.com/MalakAlKazem/GEODE-Implementation/releases/tag/datasets-v1):
+
+| archive | contents | size |
+|---|---|---|
+| `scenario06c.zip` | primary dataset: 9 baseline runs and 16 paired sleep runs | 102 MB |
+| `scenario07.zip` | scenario07 runs, sleep pairs, and the scenario06b runs (`extracted_s06b*`) used for the distribution-shift replay | 122 MB |
+
+Unzip both into `data/` so that the folders are `data/scenario06c/` and
+`data/scenario07/`. Each `extracted_*` folder holds one run as per-snapshot
+CSVs: `gnb_inputs.csv`, `ue_inputs.csv`, `serving_edges.csv`,
+`energy_targets.csv`, `kpi_targets.csv` (plus `kpi_targets_1s.csv` and
+`sinr_features.csv` where available).
 
 ### 2. Real 5G testbed — 5G3E
 

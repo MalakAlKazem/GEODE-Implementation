@@ -162,8 +162,10 @@ from a multi-site srsRAN deployment driven by real operator traffic traces.
   International Conference on 6G Networking (6GNet)*, Paris, France, 2022.
 
 This work uses three days of the dataset (Day 1 and Day 2 for training, Day 3
-held out for testing). `preprocessing/preprocess_5g3e_v4.py` converts the raw
-files into the graph tensors used by `geode_5g3e/`:
+held out for testing). `preprocessing/preprocess_5g3e.py` converts the raw
+files into the per-snapshot graphs, the train/val/test split (`split.pt`,
+last 15 % of the training days as validation) and the train-only normalisers
+(`norm_stats.pt`) used by `geode_5g3e/`:
 
 - delay: measured per-site latency;
 - jitter: short-window variation of the latency;
@@ -191,6 +193,7 @@ Place the data as below, or point the environment variables at it:
 |---|---|---|
 | scenario06c extracted runs | `data/scenario06c/` | `GEODE_S06C` |
 | scenario07 extracted runs | `data/scenario07/` | `GEODE_S07` |
+| 5G3E raw data (`day_1/`, `day_2/`, `day_3/`) | `data/5g3e_raw/` | `GEODE_5G3E_RAW` |
 | 5G3E processed tensors | `data/5g3e_processed/` | `GEODE_5G3E` |
 
 ## Trained models
@@ -230,7 +233,7 @@ processed data (`norm_stats.pt`) and are loaded with
 
 ```bash
 # 5G3E: preprocess, then train and evaluate
-python preprocessing/preprocess_5g3e_v4.py --path <5G3E raw folder> --out data/5g3e_processed
+python preprocessing/preprocess_5g3e.py --days 1 2 --test_days 3
 cd geode_5g3e
 python train_wdt_5g3e.py --help
 python cmoa_5g3e.py

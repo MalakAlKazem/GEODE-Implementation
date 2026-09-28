@@ -116,8 +116,8 @@ every statistic by both name and module path (§4.6.1). Scripts need Python ≥ 
 
 ## Datasets
 
-The datasets and trained checkpoints are **not stored in this repository**
-because of their size.
+The extracted datasets are **not stored in this repository** because of their
+size; the trained models are (see *Trained models* below).
 
 ### 1. Simulated 6G RAN — Simu5G (primary dataset)
 
@@ -146,7 +146,7 @@ of a run; afterwards a slept cell keeps the 260 W idle floor, so a sleep action
 saves only the load-proportional term.
 
 <!-- TODO: add the download link (GitHub Release or Zenodo DOI) for the
-     extracted scenario CSVs and the trained checkpoints. -->
+     extracted scenario CSVs. -->
 
 ### 2. Real 5G testbed — 5G3E
 
@@ -192,8 +192,39 @@ Place the data as below, or point the environment variables at it:
 | scenario06c extracted runs | `data/scenario06c/` | `GEODE_S06C` |
 | scenario07 extracted runs | `data/scenario07/` | `GEODE_S07` |
 | 5G3E processed tensors | `data/5g3e_processed/` | `GEODE_5G3E` |
-| GEODE checkpoints | `geode/checkpoints/` | — |
-| 5G3E checkpoints | `geode_5g3e/checkpoints_5g3e/` | — |
+
+## Trained models
+
+All trained models behind the reported results are included, so the
+evaluations can be rerun without retraining.
+
+- `geode/checkpoints/` — 114 primary-dataset models, named
+  `wdt_<tag>_<gnn|blind>_test<seed>_init<k>.pt`: `gnn` is GEODE, `blind` the
+  graph-blind control, `test<seed>` the held-out topology (61, 62, 63) and
+  `init<k>` the initialisation.
+
+  | tag | configuration | thesis |
+  |---|---|---|
+  | `adopted_nolag`, `final` | adopted architecture (4 rounds, handover dropped) | Tables 5.4, 5.5, 5.18 |
+  | `nolag_recover`, `full` | full specification (10 rounds, handover kept) | Tables 5.9, 5.10, 5.12 |
+  | `no_e2`, `no_e3`, `no_e4`, `no_attn`, `no_gru`, `no_moe`, `rounds4` | single-component ablations | Table 5.8 |
+  | `starved` | load features removed | §5.4.3 |
+  | `adopted_energy_lag`, `energy_lag_only` | clean energy lag feature (adopted / full) | Table 5.7 |
+  | `deep_energy` | full specification with a deeper energy head (exploratory) | — |
+  | `stride15`, `stride_check` | snapshot sampling rate | Table 5.13 |
+  | `kpi1s_check`, `kpi1s_log` | one-second QoS labels | Table 5.14 |
+
+- `geode_5g3e/checkpoints_5g3e/` — 19 5G3E models, named
+  `wdt5g3e_<tag>_<gnn|blind>_init<k>.pt`, trained on Day 1 + Day 2:
+  `full` (plain), `full_lag` (lag features), `full_delta` (lag + delta jitter
+  target; Table 5.1, used by `cmoa_5g3e.py` and `lifecycle_5g3e.py`) and
+  `combined_day3test`. The architecture-sweep models behind Table 5.3 were not
+  kept; `train_wdt_5g3e.py` retrains them.
+
+Primary-dataset checkpoints store their normalisers and are loaded with
+`geode/wdt_checkpoint.py`. 5G3E checkpoints use the normalisers saved with the
+processed data (`norm_stats.pt`) and are loaded with
+`load_model_from_checkpoint` in `geode_5g3e/cmoa_5g3e.py`.
 
 ## Usage
 
